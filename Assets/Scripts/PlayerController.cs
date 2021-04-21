@@ -4,12 +4,23 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //public variables allow for easy testing, can be set to private once we find the sweet spot
+    //variables for jump, normal speed, and dash distance
     public float speed;
     public float dashValue;
     public float jumpValue;
-    public GameObject character;
     public LayerMask groundLayer;
+
+    //basic required objects
+    public GameObject character;
+    public Animator animator;
+
+    //variables for attack function
+    public Transform attackPoint;
+    public float attackRange = 0.5f;
+    public LayerMask enemyLayers;
+    public int attackDamage = 40;
+
+
     //character always starts out facing right, this is used for dash and attack
     private static string facing = "right";
 
@@ -20,20 +31,38 @@ public class PlayerController : MonoBehaviour
         Jump();
         Run();
         Dash();
+        Attack();
 
         //this is just basic movement code
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f);
+        float horizontal = Input.GetAxis("Horizontal");
+        Vector3 movement = new Vector3(horizontal, 0f, 0f);
         movement.Normalize();
+
+        if (horizontal > 0)
+        {
+            animator.SetInteger("AnimState", 1);
+        }
+        else if(horizontal < 0)
+        {
+            animator.SetInteger("AnimState", 1);
+        }
+        else if (horizontal == 0)
+        {
+            animator.SetInteger("AnimState", 0);
+        }
+
         transform.position += movement * Time.deltaTime * speed;
 
         //using the horizontal axis to determine which direction the character is facing, can also be useful for animations when we get there
         if(Input.GetAxis("Horizontal") < 0)
         {
             facing = "left";
+            transform.rotation = Quaternion.Euler(0, 180, 0);
         }
         else if(Input.GetAxis("Horizontal") > 0)
         {
             facing = "right";
+            transform.rotation = Quaternion.identity;
         }
     }
 
@@ -56,9 +85,10 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(position, direction, distance, groundLayer);
         if (hit.collider != null)
         {
+            animator.SetBool("Grounded", true);
             return true;
         }
-
+        animator.SetBool("Grounded", false);
         return false;
     }
 
@@ -87,5 +117,30 @@ public class PlayerController : MonoBehaviour
         {
             gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(tempDash, 0f), ForceMode2D.Impulse);
         }
+    }
+
+    void Attack()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        { 
+            animator.SetTrigger("Attack1");
+
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+
+            foreach(Collider2D enemy in hitEnemies)
+            {
+                enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+            }
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if(attackPoint == null)
+        {
+            return;
+        }
+
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }
