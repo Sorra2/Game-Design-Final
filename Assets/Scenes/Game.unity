@@ -121,6 +121,36 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &14962578
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 14962579}
+  m_Layer: 0
+  m_Name: enemy attackpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &14962579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14962578}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 2.4000003, y: 0.20000005, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1237903472}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &120906278
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +405,7 @@ GameObject:
   - component: {fileID: 1209017851}
   - component: {fileID: 1209017855}
   - component: {fileID: 1209017856}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -445,9 +475,9 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 10
+  m_LinearDrag: 30
   m_AngularDrag: 0.05
-  m_GravityScale: 35
+  m_GravityScale: 15
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -506,9 +536,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756c31bb0e7243345bcffc55aea0587f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
-  dashValue: 50
-  jumpValue: 100
+  speed: 5
+  dashValue: 75
+  jumpValue: 50
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -520,6 +550,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   attackDamage: 40
+  maxHealth: 100
+  knockback: 0
 --- !u!95 &1209017856
 Animator:
   serializedVersion: 3
@@ -549,8 +581,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1237903472}
   - component: {fileID: 1237903471}
-  - component: {fileID: 1237903470}
   - component: {fileID: 1237903469}
+  - component: {fileID: 1237903470}
   - component: {fileID: 1237903473}
   - component: {fileID: 1237903474}
   m_Layer: 9
@@ -573,14 +605,14 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 10
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 35
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &1237903470
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -594,7 +626,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.2, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -605,7 +637,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1.23}
   m_EdgeRadius: 0
 --- !u!212 &1237903471
 SpriteRenderer:
@@ -667,7 +699,8 @@ Transform:
   m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: -3.99, y: -3.44, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 14962579}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
@@ -683,7 +716,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9408ef9bee4b6c449d6d4de8c63772b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 1237903474}
   maxHealth: 100
+  knockback: 35
+  attackPoint: {fileID: 0}
+  attackRange: 0.5
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  attackDamage: 40
 --- !u!95 &1237903474
 Animator:
   serializedVersion: 3
@@ -694,7 +735,7 @@ Animator:
   m_GameObject: {fileID: 1237903468}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3c2a5b7097b0fe44394328c0bdb9252e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     //basic required objects
     public GameObject character;
     public Animator animator;
+    private Rigidbody2D rb2D;
 
     //variables for attack function
     public Transform attackPoint;
@@ -24,6 +25,17 @@ public class PlayerController : MonoBehaviour
     //character always starts out facing right, this is used for dash and attack
     private static string facing = "right";
 
+    //health values
+    public int maxHealth = 100;
+    int currentHealth;
+    public float knockback;
+
+
+    void Start()
+    {
+        currentHealth = maxHealth;
+        rb2D = transform.GetComponent<Rigidbody2D>();
+    }
 
     void Update()
     {
@@ -49,7 +61,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && Grounded())
         {
-            gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpValue), ForceMode2D.Impulse);
+            rb2D.velocity = Vector2.up * jumpValue;
+            //gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpValue), ForceMode2D.Impulse);
         }
         
     }
@@ -75,11 +88,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            speed += 10;
+            speed *= 2;
         }
         else if (Input.GetKeyUp(KeyCode.X))
         {
-            speed -= 10;
+            speed /= 2;
         }
     }
 
@@ -141,6 +154,39 @@ public class PlayerController : MonoBehaviour
         }
 
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        //play damage anim
+        animator.SetTrigger("Hurt");
+        if (facing.Equals("right"))
+        {
+            knockback *= -1;
+        }
+        else if(facing.Equals("left"))
+        {
+            knockback = Mathf.Abs(knockback);
+        }
+        gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(knockback, 0f), ForceMode2D.Impulse);
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        //die anim
+        animator.SetTrigger("Death");
+
+        //disable enemy
+        gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;//need to change so that enemy doesn't fall off screen
+        GetComponent<Collider2D>().enabled = false;
+        this.enabled = false;
+
     }
 
     void Animate(float horizontal)
