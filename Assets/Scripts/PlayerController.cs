@@ -38,32 +38,11 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(horizontal, 0f, 0f);
         movement.Normalize();
 
-        if (horizontal > 0)
-        {
-            animator.SetInteger("AnimState", 1);
-        }
-        else if(horizontal < 0)
-        {
-            animator.SetInteger("AnimState", 1);
-        }
-        else if (horizontal == 0)
-        {
-            animator.SetInteger("AnimState", 0);
-        }
+        Animate(horizontal);
 
         transform.position += movement * Time.deltaTime * speed;
 
-        //using the horizontal axis to determine which direction the character is facing, can also be useful for animations when we get there
-        if(Input.GetAxis("Horizontal") < 0)
-        {
-            facing = "left";
-            transform.rotation = Quaternion.Euler(0, 180, 0);
-        }
-        else if(Input.GetAxis("Horizontal") > 0)
-        {
-            facing = "right";
-            transform.rotation = Quaternion.identity;
-        }
+        facing = Facing(horizontal);
     }
 
     void Jump()
@@ -119,6 +98,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    string Facing(float horizontal)
+    {
+        //using the horizontal axis to determine which direction the character is facing, can also be useful for animations when we get there
+        if (horizontal < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            return "left";
+        }
+        else if (Input.GetAxis("Horizontal") > 0)
+        {
+            transform.rotation = Quaternion.identity;
+            return "right";
+        }
+        //last block is for if the player isn't moving
+        else
+        {
+            return facing;
+        }
+    }
+
     void Attack()
     {
         if (Input.GetKeyDown(KeyCode.Z))
@@ -142,5 +141,22 @@ public class PlayerController : MonoBehaviour
         }
 
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+
+    void Animate(float horizontal)
+    {
+        //first 2 blocks for walking, last is for idle
+        if (horizontal > 0)
+        {
+            animator.SetInteger("AnimState", 1);
+        }
+        else if (horizontal < 0)
+        {
+            animator.SetInteger("AnimState", 1);
+        }
+        else if (horizontal == 0)
+        {
+            animator.SetInteger("AnimState", 0);
+        }
     }
 }
