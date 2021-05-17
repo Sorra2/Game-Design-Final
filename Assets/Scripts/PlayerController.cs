@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
     public int attackDamage = 40;
+    public static int lives = 3;
 
 
     //character always starts out facing right, this is used for dash and attack
@@ -28,11 +29,14 @@ public class PlayerController : MonoBehaviour
     //health values
     public int maxHealth = 100;
     int currentHealth;
-    public float knockback;
 
 
     void Start()
     {
+        this.transform.position = new Vector2(-9.17f, -3.55f);
+        gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;//need to change so player can move again
+        GetComponent<Collider2D>().enabled = true;
+        enabled = true;
         currentHealth = maxHealth;
         rb2D = transform.GetComponent<Rigidbody2D>();
     }
@@ -50,11 +54,15 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(horizontal, 0f, 0f);
         movement.Normalize();
 
+        //animations
         Animate(horizontal);
 
+        //set movement for player
         transform.position += movement * Time.deltaTime * speed;
 
+        //get direction player is facing
         facing = Facing(horizontal);
+
     }
 
     void Jump()
@@ -62,7 +70,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && Grounded())
         {
             rb2D.velocity = Vector2.up * jumpValue;
-            //gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpValue), ForceMode2D.Impulse);
         }
         
     }
@@ -119,7 +126,7 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 180, 0);
             return "left";
         }
-        else if (Input.GetAxis("Horizontal") > 0)
+        else if (horizontal > 0)
         {
             transform.rotation = Quaternion.identity;
             return "right";
@@ -162,15 +169,6 @@ public class PlayerController : MonoBehaviour
 
         //play damage anim
         animator.SetTrigger("Hurt");
-        if (facing.Equals("right"))
-        {
-            knockback *= -1;
-        }
-        else if(facing.Equals("left"))
-        {
-            knockback = Mathf.Abs(knockback);
-        }
-        gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(knockback, 0f), ForceMode2D.Impulse);
         if (currentHealth <= 0)
         {
             Die();
@@ -182,10 +180,16 @@ public class PlayerController : MonoBehaviour
         //die anim
         animator.SetTrigger("Death");
 
-        //disable enemy
-        gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;//need to change so that enemy doesn't fall off screen
+        //disable player
+        gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;//need to change so that player doesn't fall off screen
         GetComponent<Collider2D>().enabled = false;
-        this.enabled = false;
+        enabled = false;
+
+        if(lives >= 0)
+        {
+            Start();
+            lives--;
+        }
 
     }
 
