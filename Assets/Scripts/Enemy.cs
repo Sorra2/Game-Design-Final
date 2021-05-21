@@ -13,16 +13,13 @@ public class Enemy : MonoBehaviour
 
     private static int attackCycle;
     private static string facing = "left";
+    public Rigidbody2D player;
     private Rigidbody2D rb2D;
 
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask playerLayer;
     public int attackDamage = 40;
-
-    private static float waypoint1 = -5;
-    private static float waypoint2 = -1;
-    private static float destination = waypoint1;
 
     // Start is called before the first frame update
     void Start()
@@ -34,27 +31,24 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        Vector3 movement;
         attackCycle++;
 
-        if(rb2D.position.x == destination && destination == waypoint1)
+        if (attackCycle == 300)
         {
-            destination = waypoint2;
-        }
-        else if(rb2D.position.x == destination && destination == waypoint2)
-        {
-            destination = waypoint1;
+            Attack();
+            attackCycle = 0;
         }
 
-        if (waypoint1 == destination && rb2D.position.x != waypoint1)
+        if (player.position.x > rb2D.position.x && facing.Equals("left"))
         {
-            rb2D.velocity = new Vector2(-10f, 0f);
+            transform.rotation = Quaternion.identity;
+            facing = "right";
         }
-        else if(waypoint2 == destination && rb2D.position.x != waypoint2)
+        else if (player.position.x < rb2D.position.x && facing.Equals("right"))
         {
-            rb2D.velocity = new Vector2(10f, 0f);
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            facing = "left";
         }
-
 
     }
 
@@ -94,36 +88,4 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    string Facing(float horizontal)
-    {
-        //using the horizontal axis to determine which direction the character is facing, can also be useful for animations when we get there
-        if (horizontal < 0)
-        {
-            transform.rotation = Quaternion.Euler(0, 180, 0);
-            return "left";
-        }
-        else if (Input.GetAxis("Horizontal") > 0)
-        {
-            transform.rotation = Quaternion.identity;
-            return "right";
-        }
-        //last block is for if the player isn't moving
-        else
-        {
-            return facing;
-        }
-    }
-
-    void Animate(float horizontal)
-    {
-        //first 2 blocks for walking, last is for idle
-        if (horizontal > 0)
-        {
-            animator.SetInteger("AnimState", 1);
-        }
-        else if (horizontal < 0)
-        {
-            animator.SetInteger("AnimState", 1);
-        }
-    }
 }

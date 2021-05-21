@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        this.transform.position = new Vector2(-9.17f, -3.55f);
+        transform.position = new Vector2(-9.17f, -1.22f);
         gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;//need to change so player can move again
         GetComponent<Collider2D>().enabled = true;
         enabled = true;
@@ -64,6 +64,7 @@ public class PlayerController : MonoBehaviour
         facing = Facing(horizontal);
 
     }
+
 
     void Jump()
     {
@@ -120,7 +121,7 @@ public class PlayerController : MonoBehaviour
 
     string Facing(float horizontal)
     {
-        //using the horizontal axis to determine which direction the character is facing, can also be useful for animations when we get there
+        //using the horizontal axis to determine which direction the character is facing, also useful for animations
         if (horizontal < 0)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
