@@ -1,14 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    //variables for jump, normal speed, and dash distance
+    //variables for jump and normal speed
     public float speed;
-    public float dashValue;
     public float jumpValue;
     public LayerMask groundLayer;
+    
+    //dash variables
+    public float dashValue;
+    public static int dashCharge = 0;
+    public Text dashBar;
 
     //basic required objects
     public GameObject character;
@@ -20,6 +25,9 @@ public class PlayerController : MonoBehaviour
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
     public int attackDamage = 40;
+
+    //lives
+    public Text lifeCounter;
     public static int lives = 3;
 
 
@@ -33,7 +41,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        transform.position = new Vector2(-9.17f, -1.22f);
+        //transform.position = new Vector2(-9.17f, -1.22f);
+        lifeCounter.text = "   x" + lives;
         gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;//need to change so player can move again
         GetComponent<Collider2D>().enabled = true;
         enabled = true;
@@ -46,7 +55,21 @@ public class PlayerController : MonoBehaviour
         //each of these are called every frame, can be changed if we want a delay
         Jump();
         Run();
-        Dash();
+
+        
+        if(dashCharge < 500)
+        {
+            dashCharge++;
+            dashBar.text = "Dash: " + (dashCharge/5);
+        }
+        else
+        {
+            if(dashCharge == 500)
+            {
+                dashBar.text = "Ready!";
+            }
+            Dash();
+        }
         Attack();
 
         //this is just basic movement code
@@ -80,16 +103,17 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 position = transform.position;
         Vector2 direction = Vector2.down;
-        float distance = 1.0f;
+        float distance = 1.25f;
 
         RaycastHit2D hit = Physics2D.Raycast(position, direction, distance, groundLayer);
         if (hit.collider != null)
         {
-            animator.SetBool("Grounded", true);
             return true;
         }
-        animator.SetBool("Grounded", false);
-        return false;
+        else
+        {
+            return false;
+        }
     }
 
     void Run()
@@ -116,6 +140,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
         {
             gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(tempDash, 0f), ForceMode2D.Impulse);
+            dashCharge = 0;
         }
     }
 

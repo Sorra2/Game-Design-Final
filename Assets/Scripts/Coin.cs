@@ -29,7 +29,16 @@ public class Coin : MonoBehaviour
     void GetCoin()
     {
         coinCount++;
+
+        if (coinCount < 100)
+        {
         visualCounter.text = "   x" + coinCount;
+        }
+        else
+        {
+            visualCounter.text = "   x" + 0;
+            coinCount = 0;
+        }
         Destroy(gameObject);
     }
 
