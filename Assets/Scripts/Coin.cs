@@ -37,6 +37,7 @@ public class Coin : MonoBehaviour
         else
         {
             visualCounter.text = "   x" + 0;
+            PlayerController.lives++;
             coinCount = 0;
         }
         Destroy(gameObject);

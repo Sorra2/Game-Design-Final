@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     public Animator animator;
 
-    public int maxHealth = 100;
+    public int maxHealth = 3;
     int currentHealth;
 
     public float speed = 3;
@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask playerLayer;
-    public int attackDamage = 40;
+    public int attackDamage = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +27,9 @@ public class Enemy : MonoBehaviour
         currentHealth = maxHealth;
         attackCycle = 0;
         rb2D = transform.GetComponent<Rigidbody2D>();
+        rb2D.constraints = RigidbodyConstraints2D.FreezeAll;
     }
+
 
     void Update()
     {

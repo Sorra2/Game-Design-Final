@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
-    public int attackDamage = 40;
+    public int attackDamage = 3;
 
     //lives
     public Text lifeCounter;
@@ -35,13 +35,16 @@ public class PlayerController : MonoBehaviour
     private static string facing = "right";
 
     //health values
-    public int maxHealth = 100;
-    int currentHealth;
+    public int maxHealth = 3;
+    private int currentHealth;
+    public GameObject heart1;
+    public GameObject heart2;
+    public GameObject heart3;
 
 
     void Start()
     {
-        //transform.position = new Vector2(-9.17f, -1.22f);
+        transform.position = new Vector2(-8.2f, 2f);
         lifeCounter.text = "   x" + lives;
         gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;//need to change so player can move again
         GetComponent<Collider2D>().enabled = true;
@@ -192,9 +195,23 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-
         //play damage anim
         animator.SetTrigger("Hurt");
+        switch (currentHealth)
+        {
+            case 3:
+                Debug.Log(currentHealth);
+                Destroy(heart3);
+                break;
+
+            case 2:
+                Destroy(heart2);
+                break;
+
+            case 1:
+                Destroy(heart1);
+                break;
+        }
         if (currentHealth <= 0)
         {
             Die();
@@ -213,6 +230,7 @@ public class PlayerController : MonoBehaviour
 
         if(lives >= 0)
         {
+            new WaitForSecondsRealtime(3f);
             Start();
             lives--;
         }
