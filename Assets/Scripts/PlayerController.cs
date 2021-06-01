@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
-    public int attackDamage = 3;
+    private int attackDamage = 3;
 
     //lives
     public Text lifeCounter;
@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     private static string facing = "right";
 
     //health values
-    public int maxHealth = 3;
+    private int maxHealth = 3;
     private int currentHealth;
     public GameObject heart1;
     public GameObject heart2;
@@ -44,6 +44,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        heart1.transform.GetComponent<SpriteRenderer>().enabled = true;
+        heart2.transform.GetComponent<SpriteRenderer>().enabled = true;
+        heart3.transform.GetComponent<SpriteRenderer>().enabled = true;
         transform.position = new Vector2(-8.2f, 2f);
         lifeCounter.text = "   x" + lives;
         gameObject.transform.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;//need to change so player can move again
@@ -58,7 +61,7 @@ public class PlayerController : MonoBehaviour
         //each of these are called every frame, can be changed if we want a delay
         Jump();
         Run();
-
+        Debug.Log(currentHealth);
         
         if(dashCharge < 500)
         {
@@ -194,24 +197,24 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
         //play damage anim
+        currentHealth -= damage;
+
         animator.SetTrigger("Hurt");
-        switch (currentHealth)
+        if(currentHealth == 2)
         {
-            case 3:
-                Debug.Log(currentHealth);
-                Destroy(heart3);
-                break;
-
-            case 2:
-                Destroy(heart2);
-                break;
-
-            case 1:
-                Destroy(heart1);
-                break;
+            heart1.transform.GetComponent<SpriteRenderer>().enabled = false;
         }
+        else if(currentHealth == 1)
+        {
+            heart2.transform.GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+        {
+            heart3.transform.GetComponent<SpriteRenderer>().enabled = false;
+        }
+
+
         if (currentHealth <= 0)
         {
             Die();
@@ -230,7 +233,6 @@ public class PlayerController : MonoBehaviour
 
         if(lives >= 0)
         {
-            new WaitForSecondsRealtime(3f);
             Start();
             lives--;
         }

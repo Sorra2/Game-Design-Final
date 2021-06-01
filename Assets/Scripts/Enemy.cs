@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     public Animator animator;
 
-    public int maxHealth = 3;
+    private int maxHealth = 3;
     int currentHealth;
 
     public float speed = 3;
@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask playerLayer;
-    public int attackDamage = 1;
+    private int attackDamage = 1;
 
     // Start is called before the first frame update
     void Start()

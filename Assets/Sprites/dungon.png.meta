@@ -1,16 +1,7 @@
 fileFormatVersion: 2
-guid: 9516b003d499ca54a9c78ee3ba1d40c7
+guid: 13154155e2ce2e44da044460ad6cf238
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 7372012060664605398
-    second: main character (Jump)_0
-  - first:
-      213: -4909906860304246556
-    second: main character (Jump)_1
-  - first:
-      213: 5324228363808874239
-    second: main character (Jump)_2
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -49,7 +40,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -94,70 +85,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: main character (Jump)_0
-      rect:
-        serializedVersion: 2
-        x: 15
-        y: 76
-        width: 33
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6da2fcb19e5ae4660800000000000000
-      internalID: 7372012060664605398
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: main character (Jump)_1
-      rect:
-        serializedVersion: 2
-        x: 88
-        y: 86
-        width: 33
-        height: 66
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4e8df4f69b18cdbb0800000000000000
-      internalID: -4909906860304246556
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: main character (Jump)_2
-      rect:
-        serializedVersion: 2
-        x: 15
-        y: 0
-        width: 33
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ffe13e7ec7573e940800000000000000
-      internalID: 5324228363808874239
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
